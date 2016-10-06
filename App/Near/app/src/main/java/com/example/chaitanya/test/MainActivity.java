@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         // show it
         alertDialog.show();
 
-
+        final Intent I = new Intent(this,ListNearsActivity.class);
         button_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 name = edit_name.getText().toString();
                 edit_name.setText("");
                 send_my_IP_name(name,IP_tracker,port_tracker_send_name);//This function will send the name that user has entered to the tracker
-                startActivity(new Intent(MainActivity.this,ListNearsActivity.class));
+                startActivity(I);
 
             }
         });

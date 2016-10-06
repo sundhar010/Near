@@ -51,7 +51,7 @@ public class SendMyName  extends AsyncTask<Void, Void, Void> {
             System.out.println("Just connected to " + client.getRemoteSocketAddress());
             OutputStream outToServer = client.getOutputStream();
             DataOutputStream out = new DataOutputStream(outToServer);
-
+            System.out.println(name);
             out.writeUTF(name +":"+ client.getLocalSocketAddress());
             client.close();
         } catch (IOException e) {
