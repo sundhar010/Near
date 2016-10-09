@@ -1,33 +1,13 @@
-package com.example.chaitanya.test;
+package com.project.near.app;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Process;
-import android.widget.Toast;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.location.LocationManager;
-import android.support.annotation.IdRes;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-import java.net.*;
-import java.io.*;
 
 public class SendMyName  extends AsyncTask<Void, Void, Void> {
 

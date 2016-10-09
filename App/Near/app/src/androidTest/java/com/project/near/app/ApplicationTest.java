@@ -1,4 +1,4 @@
-package com.example.chaitanya.test;
+package com.project.near.app;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

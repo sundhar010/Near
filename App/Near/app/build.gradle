@@ -5,7 +5,7 @@ android {
     buildToolsVersion "24.0.0"
 
     defaultConfig {
-        applicationId "com.example.chaitanya.test"
+        applicationId "com.example.near.app"
         minSdkVersion 14
         targetSdkVersion 24
         versionCode 1
