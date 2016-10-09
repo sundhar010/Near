@@ -31,11 +31,10 @@ public class ListNearsActivity extends AppCompatActivity{
         actionBar.setTitle("Nears Present");
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3cb879")));
         setContentView(R.layout.activity_list_nears);
-        mListView = (ListView) findViewById(R.id.months_list);
-
-
-
+        mListView = (ListView) findViewById(R.id.nears_list);
         try {
+            Thread thread = new NearAlive(6068);
+            thread.start();
             Thread t = new ThreadToRcvDict(PortRcvDict,mListView,this);
             t.start();
         }catch(IOException e) {
@@ -89,8 +88,7 @@ class ThreadToRcvDict extends Thread {
                 String Str = new String(message);
                 int i=0;
                 DataOutputStream out = new DataOutputStream(server.getOutputStream());
-                out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress()
-                        + "\nGoodbye!");
+                out.writeUTF("Thank you for updating the list " + server.getLocalSocketAddress());
                 in.close();
                 out.close();
                 server.close();

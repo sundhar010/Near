@@ -13,8 +13,10 @@ public class Tail {
         	DictNameIp Dict = new DictNameIp();
                 try{
                         int port = Integer.parseInt(args[0]);
+			Thread th = new NearState(Dict); 
                         Thread t = new Listner(port,Dict);
                         t.start();
+			th.start();
                 }catch(IOException e) {
                         e.printStackTrace();
                 }

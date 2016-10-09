@@ -1,4 +1,3 @@
-																																																																																																																																																																																																																																																																			import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -31,37 +30,43 @@ public class NearState extends  Thread {
 		while(true){
 			String serverName;
 			int port;
+			try {
+				Thread.sleep(300);
+			} catch(InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			}
 			Set<String> set = Dict.Dict.keySet();
-			System.out.println( set);
 			if(Dict.Dict.size()>0){
 				for(String keyy: set){
 					serverName =(String)Dict.Dict.get(keyy);
+					System.out.println("checking for"+serverName);
 					port = 6068;
 					try {
-				         System.out.println("Connecting to " + serverName + " on port " + port);
-				         Socket client = new Socket(serverName, port);
-				         
-				         System.out.println("Just connected to " + client.getRemoteSocketAddress());
-				         java.io.OutputStream outToServer = client.getOutputStream();
-				         DataOutputStream out = new DataOutputStream(outToServer);
-				         
-				         out.writeUTF("Alive??");
-				         java.io.InputStream inFromServer = client.getInputStream();
-				         DataInputStream in = new DataInputStream(inFromServer);
-				         
-				         System.out.println("Server says " + in.readUTF());
-				         client.close();
-				      }catch(IOException e) {
-				    	  DelDictSendAll(keyy);
-				         e.printStackTrace();
-				    }
+						System.out.println("Connecting to " + serverName + " on port " + port);
+						Socket client = new Socket(serverName, port);
+
+						System.out.println("Just connected to " + client.getRemoteSocketAddress());
+						java.io.OutputStream outToServer = client.getOutputStream();
+						DataOutputStream out = new DataOutputStream(outToServer);
+
+						out.writeUTF("Alive??");
+						java.io.InputStream inFromServer = client.getInputStream();
+						DataInputStream in = new DataInputStream(inFromServer);
+
+						System.out.println("Server says " + in.readUTF());
+						client.close();
+					}catch(IOException e) {
+						DelDictSendAll(keyy);
+
+						e.printStackTrace();
+					}
 				}
 			}
 		}
 	}
 	public void DelDictSendAll(String key){
 		Set<String> set = Dict.Dict.keySet();
-		System.out.println( set);
+		System.out.println("before removing");
 		for(String keyy: set)
 			System.out.println(keyy + " - " + Dict.Dict.get(keyy));
 		System.out.println();
@@ -74,7 +79,10 @@ public class NearState extends  Thread {
 			SendDictSocket sennd = new SendDictSocket((String)Dict.Dict.get(keyy));
 			sennd.send(message);
 		}
+		System.out.println("after removing");
+		for(String keyy: set)
+			System.out.println(keyy + " - " + Dict.Dict.get(keyy));
 		System.out.println(message);
-		
+
 	}
 }
