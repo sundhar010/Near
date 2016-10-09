@@ -102,6 +102,10 @@ public class ListNearsActivity extends AppCompatActivity{
             e.printStackTrace();
         }
     }
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 
 
 }

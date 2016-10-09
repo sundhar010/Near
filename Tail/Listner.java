@@ -61,10 +61,12 @@ public class Listner extends  Thread {
 				String[] parts = NameIp.split(":");
 				parts[1]=parts[1].replace("/", "");
 				System.out.println(parts[1] + ":"+ parts[2]);
+				try {
+ 				   Thread.sleep(300);                 
+				} catch(InterruptedException ex) {
+				    Thread.currentThread().interrupt();
+				}
 				UpdateDictSendAll(parts[0],parts[1]);
-				/*	DataOutputStream out = new DataOutputStream(server.getOutputStream());
-					out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress()
-					+ "\nGoodbye!");*/
 				server.close();
 
 			}catch(IOException e) {
