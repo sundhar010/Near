@@ -1,5 +1,7 @@
 package com.example.chaitanya.test;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.ActionBar;
@@ -77,26 +79,29 @@ import android.app.Activity;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.widget.ListView;
+import android.widget.Toast;
+import android.view.View;
 public class ListNearsActivity extends AppCompatActivity{
 
     TextView Texttest;
     ListView mListView;
-    Activity A = this;
-
     public static final int PortRcvDict = 6067;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        actionBar.setTitle("Nears Present");
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3cb879")));
         setContentView(R.layout.activity_list_nears);
-         Texttest =(TextView) findViewById(R.id.textView);
+        mListView = (ListView) findViewById(R.id.months_list);
 
-        mListView = (ListView) findViewById(R.id.list);
+
 
         try {
-            Thread t = new ThreadToRcvDict(PortRcvDict, Texttest,mListView);
+            Thread t = new ThreadToRcvDict(PortRcvDict,mListView,this);
             t.start();
         }catch(IOException e) {
             e.printStackTrace();
@@ -112,13 +117,13 @@ public class ListNearsActivity extends AppCompatActivity{
 
 class ThreadToRcvDict extends Thread {
     private ServerSocket serverSocket;
-    TextView Testtext;
     ListView mListView;
-    Activity A;
-    public ThreadToRcvDict(int port, TextView textview,ListView mListView) throws IOException {
+    Context context;
+
+    public ThreadToRcvDict(int port,ListView mListView,Context context) throws IOException {
         serverSocket = new ServerSocket(port);
-        this.Testtext = textview;
         this.mListView=mListView;
+        this.context=context;
 
     }
 
@@ -133,13 +138,15 @@ class ThreadToRcvDict extends Thread {
                 DataInputStream in = new DataInputStream(server.getInputStream());
                 final String message;
                 message = in.readUTF();
-                String[] Nears_names = null;
-                System.out.println(message+"****");
+                final String[] Nears_names=message.split(";"); ;
+
 
                 Utils.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Testtext.setText(message);
+
+
+                        mListView.setAdapter(new ListAdaptor(context,Nears_names    ));
 
                     }
                 });
