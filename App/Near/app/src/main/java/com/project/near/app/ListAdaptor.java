@@ -28,16 +28,11 @@ public class ListAdaptor extends ArrayAdapter {
         TextView textView = (TextView) rowView.findViewById(R.id.label);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.logo);
         textView.setText(values[position]);
-
-        // Change icon based on name
         String s = values[position];
-
         System.out.println(s);
-
-
-            imageView.setImageResource(R.drawable.ic_launcher);
-
+        imageView.setImageResource(R.drawable.ic_launcher);
         return rowView;
     }
+
 }
 

@@ -14,17 +14,17 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name="com.project.near.app.MainActivity">
+        android:theme="@style/AppTheme"
+        android:name=".ChatDict">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.project.near.app.ListNearsActivity"
-            android:label="@string/app_name"
-            ></activity>
+        <activity android:name=".ListNearsActivity" ></activity>
+        <activity android:name=".Chat"></activity>
     </application>
 
 </manifest>
