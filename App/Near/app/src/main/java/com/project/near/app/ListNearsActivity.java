@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.SyncStateContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
@@ -46,12 +49,12 @@ public class ListNearsActivity extends AppCompatActivity{
         }catch(IOException e) {
             e.printStackTrace();
         }
+       RcvChatMessage rcvr = new RcvChatMessage(this);
+        rcvr.start();
+
 
     }
-    public void setdict(String[] Nears_names){
-        System.out.println("setdict");
-        ((ChatDict) this.getApplication()).initChatDict(Nears_names);
-    }
+
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
@@ -87,7 +90,11 @@ class ThreadToRcvDict extends Thread {
                 final String[] Nears_names=message.split(";");
                // ListNearsActivity listna = new ListNearsActivity();
                 //((ListNearsActivity)listna).setdict(Nears_names);
-                ((ChatDict) ((Activity)context).getApplication()).initChatDict(Nears_names);
+                ChatDict chatDict = ChatDict.getInstance();
+                chatDict.initChatDict(Nears_names);
+                //final ChatDict chatDict = new ChatDict();
+                //chatDict.initChatDict(Nears_names);
+
 
                 Utils.runOnUiThread(new Runnable() {
                     @Override
@@ -99,6 +106,7 @@ class ThreadToRcvDict extends Thread {
                                                     long arg3) {
                                 Intent I = new Intent(context,Chat.class);
                                 I.putExtra("name",Nears_names[arg2] );
+                               // I.putExtra("DictObj",chatDict);
                                 Log.d("############","Items " +  Nears_names[arg2] );
                                 context.startActivity(I);
 
@@ -128,6 +136,7 @@ class ThreadToRcvDict extends Thread {
 
     public static void runOnUiThread(Runnable runnable){
         final Handler UIHandler = new Handler(Looper.getMainLooper());
+
         UIHandler .post(runnable);
     }
 

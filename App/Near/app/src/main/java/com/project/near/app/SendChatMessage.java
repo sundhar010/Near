@@ -29,7 +29,7 @@ public class SendChatMessage extends AsyncTask<Void, Void, Void> {
             sendData = message.getBytes();
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, Port);
             clientSocket.send(sendPacket);
-            System.out.println("UDP snet "+message);
+            System.out.println("UDP snet "+sendData);
             clientSocket.close();
         } catch (IOException e) {
             e.printStackTrace();

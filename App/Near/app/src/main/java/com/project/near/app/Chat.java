@@ -1,13 +1,18 @@
 package com.project.near.app;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AbsListView;
@@ -33,11 +38,17 @@ public class Chat extends AppCompatActivity {
     private EditText chatText;
     private Button buttonSend;
     private boolean side = true;
+    private BroadcastReceiver receiver;
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter("custom-event-name"));
         setContentView(R.layout.activity_chat);
 
         buttonSend = (Button) findViewById(R.id.send);
@@ -49,7 +60,28 @@ public class Chat extends AppCompatActivity {
         String [] NameIP = name.split("-");
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(NameIP[0]);
-        final String IP = NameIP[1];
+        final String IP = NameIP[1].replace(" ","");
+
+
+
+   /*      BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+
+            @Override
+
+            public void onReceive(Context context, Intent intent) {
+
+                String message = intent.getStringExtra("message");
+               ReceiveMesg(message);
+                //  ... react to local broadcast message
+
+            }
+
+        };*/
+
+
+
+
+
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3cb879")));
 
 
@@ -86,15 +118,31 @@ public class Chat extends AppCompatActivity {
                 listView.setSelection(chatArrayAdapter.getCount() - 1);
             }
         });
+
         setAllChats(IP);
-        RcvChatMessage rcvr;
-        rcvr = new RcvChatMessage(this);
-        rcvr.start();
+    }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            String message = intent.getStringExtra("message");
+            ReceiveMesg(message);
+        }
+    };
+
+
+    private void ReceiveMesg(String message) {
+        System.out.println("ReceiveMesg function ****** "+message);
+        String [] msg = message.split("_");
+        showMessage(msg[1],msg[0]);
     }
 
     private void setAllChats(String IP) {
-        List<String> chat = ((ChatDict) this.getApplication()).getChat(IP);
 
+        ChatDict chatDict = ChatDict.getInstance();
+        List<String> chat = chatDict.getChat(IP);
+            System.out.println("Test"+"IP = "+IP);
             for (String pmsg : chat) {
                 System.out.println(pmsg+" setallchats");
                 String [] msg = pmsg.split("_");
@@ -105,14 +153,20 @@ public class Chat extends AppCompatActivity {
     }
 
     private void showMessage(String msg, String sider) {
+        ;
+        boolean bool = true;
+        System.out.println("side "+ sider);
         if(sider == "R"){
-        side = true;
+        bool = false;
+            System.out.println("msg = "+msg+" side = "+sider+" bool = "+bool);
         }
-        else if (sider == "L")
-        {
-            side = false;
+        else {
+            if (sider == "L") {
+                bool = true;
+                System.out.println("msg = " + msg + " side = " + sider + " bool = " + bool);
+            }
         }
-        chatArrayAdapter.add(new ChatMessage(side,msg));
+        chatArrayAdapter.add(new ChatMessage(bool,msg));
     }
 
     private boolean sendChatMessage(String IP)  {
@@ -125,9 +179,18 @@ public class Chat extends AppCompatActivity {
         sender.execute();
         String puts = "R_"+s;
         System.out.println(IP+" "+puts+" sendchatmessage button press");
-        ((ChatDict) this.getApplication()).setChat(IP,puts);
+       // showMessage(s,"R");
+        ChatDict chatdict = ChatDict.getInstance();
+        chatdict.setChat(IP,puts);
+
+        //((ChatDict) (this).getApplication()).setChat(IP,puts);
         return true;
     }
-
-
+    @Override
+    protected void onDestroy() {
+        // Unregister since the activity is about to be closed.
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
+    }
 }
+
