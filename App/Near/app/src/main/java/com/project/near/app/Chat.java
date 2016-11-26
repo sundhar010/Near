@@ -156,13 +156,13 @@ public class Chat extends AppCompatActivity {
         ;
         boolean bool = true;
         System.out.println("side "+ sider);
-        if(sider == "R"){
-        bool = false;
+        if((sider.replace(" ","")).equals("R")){
+        bool = true;
             System.out.println("msg = "+msg+" side = "+sider+" bool = "+bool);
         }
         else {
-            if (sider == "L") {
-                bool = true;
+            if ((sider.replace(" ","")).equals("L")) {
+                bool = false;
                 System.out.println("msg = " + msg + " side = " + sider + " bool = " + bool);
             }
         }

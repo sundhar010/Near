@@ -42,10 +42,10 @@ public class RcvChatMessage extends Thread  {
         } catch (SocketException e) {
             e.printStackTrace();
         }
-        byte[] receiveData = new byte[1000];
         byte[] sendData = new byte[1024];
         while(true)
         {
+            byte[] receiveData = new byte[1000];
             System.out.println("Rcvr thread running");
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             System.out.println("Rcvr socket fine");
@@ -68,7 +68,6 @@ public class RcvChatMessage extends Thread  {
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
             chatdict.addChat(IP,puts);
-            Toast.makeText(context,"you got a message",Toast.LENGTH_LONG).show();
                 // ((ChatDict) ((Activity)context).getApplication()).setChat(IP,puts);
         }
 
